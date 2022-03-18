@@ -2,20 +2,12 @@
 
 namespace Study\DesignPattern;
 
+use Study\DesignPattern\Taxes\ITaxStrategy;
+
 class TaxCalculator
 {
-    public function calculate(Budget $budget, string $taxType): float
+    public function calculate(Budget $budget, ITaxStrategy $tax): float
     {
-        /* Problemas:
-            * Crescer para sempre (adição de novos impostos)
-            * Não tem regra para garantir só impostos válidos
-        */
-        switch ($taxType) {
-            case "ICMS":
-                return $budget->value * 0.1;
-                break;
-            case "ISS":
-                return $budget->value * 0.06;
-        }
+        return $tax->calculate($budget);
     }
 }
