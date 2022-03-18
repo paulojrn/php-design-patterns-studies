@@ -2,28 +2,26 @@
 
 namespace Study\DesignPattern;
 
+use Study\DesignPattern\Discount\ItemDiscount;
+use Study\DesignPattern\Discount\NoDiscount;
+use Study\DesignPattern\Discount\ValueDiscount;
+
 class DiscountCalculator
 {
     public function calculate(Budget $budget): float
     {
-        $discount = 0;
+        /* Teste A */
+        $chainOfDiscountsA = new ItemDiscount(new ValueDiscount());
 
-        /* Problema:
-            * Pode crescer pra sempre.
-            * Muitos ifs.
-            * Lógica dos ifs utilizam parâmetros de budget diferentes (budget não sabe a estratégia para diferentes descontos).
-            * Estratégia de desconto precisa ser calculada pois é preciso definir qual desconto de acordo com orçamento.
-            * Ordem importa.
-        */
+        /* Teste B */
+        $noDiscount = new NoDiscount();
+        $valueDiscount = (new ValueDiscount($noDiscount))->setValueAmountLimit(200);
+        $chainOfDiscountsB = (new ItemDiscount($valueDiscount))->setItemAmountLimit(3);
 
-        if ($budget->value > 500) {
-            $discount = 0.05;
-        }
+        /* Teste C */
+        $itemDiscount = (new ItemDiscount($noDiscount))->setItemAmountLimit(3);
+        $chainOfDiscountsC = (new ValueDiscount($itemDiscount))->setValueAmountLimit(200);
 
-        if ($budget->itemAmount > 5) {
-            $discount = 0.1;
-        }
-
-        return $budget->value * $discount;
+        return $chainOfDiscountsC->calculate($budget);
     }
 }
