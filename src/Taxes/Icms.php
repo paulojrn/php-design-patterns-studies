@@ -4,7 +4,7 @@ namespace Study\DesignPattern\Taxes;
 
 use Study\DesignPattern\Budget;
 
-class Icms implements ITaxStrategy
+class Icms implements TaxStrategyInterface
 {
     public function calculate(Budget $budget): float
     {

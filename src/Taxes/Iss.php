@@ -4,7 +4,7 @@ namespace Study\DesignPattern\Taxes;
 
 use Study\DesignPattern\Budget;
 
-class Iss implements ITaxStrategy
+class Iss implements TaxStrategyInterface
 {
     public function calculate(Budget $budget): float
     {
