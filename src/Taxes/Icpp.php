@@ -4,14 +4,20 @@ namespace Study\DesignPattern\Taxes;
 
 use Study\DesignPattern\Budget;
 
-class Icpp implements TaxStrategyInterface
+class Icpp extends TaxWith2AliquotAbstract
 {
-    public function calculate(Budget $budget): float
+    protected function isMaxTax(Budget $budget): bool
     {
-        if ($budget->value > 500) {
-            return $budget->value * 0.03;
-        }
+        return $budget->value > 500;
+    }
 
+    protected function calculateWithMaxTax(Budget $budget): float
+    {
+        return $budget->value * 0.03;
+    }
+
+    protected function calculateWithMinTax(Budget $budget): float
+    {
         return $budget->value * 0.02;
     }
 }
