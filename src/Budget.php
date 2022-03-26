@@ -2,29 +2,37 @@
 
 namespace Study\DesignPattern;
 
-use DomainException;
+use Study\DesignPattern\BudgetStates\BudgetStatesAbstract;
+use Study\DesignPattern\BudgetStates\OnApproval;
 
 class Budget
 {
     public int $itemAmount;
     public float $value;
-    public string $status;
+    public BudgetStatesAbstract $state;
 
-    public function applyExtraDiscount()
+    public function __construct()
     {
-        $this->value = $this->calculateExtraDiscount();
+        $this->state = new OnApproval();
     }
 
-    public function calculateExtraDiscount()
+    public function applyExtraDiscount(): void
     {
-        if ($this->status === "EM_APROVACAO") {
-            return $this->value * 0.05;
-        }
+        $this->value -= $this->state->calculateExtraDiscount($this);
+    }
 
-        if ($this->state === "APROVADO") {
-            return $this->value * 0.02;
-        }
+    public function approve(): void
+    {
+        $this->state->approve($this);
+    }
 
-        throw new DomainException("Orçamentos aprovados e finalizados não podem recerber descontos");
+    public function reprove(): void
+    {
+        $this->state->reprove($this);
+    }
+
+    public function finalize(): void
+    {
+        $this->state->finalize($this);
     }
 }
