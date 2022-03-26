@@ -11,14 +11,21 @@ class Budget
     public float $value;
     public BudgetStatesAbstract $state;
 
-    public function __construct()
+    public function __construct(float $value, int $itemAmount)
     {
         $this->state = new OnApproval();
+        $this->itemAmount = $itemAmount;
+        $this->value = $value;
     }
 
     public function applyExtraDiscount(): void
     {
         $this->value -= $this->state->calculateExtraDiscount($this);
+    }
+
+    public function getState(): BudgetStatesAbstract
+    {
+        return $this->state;
     }
 
     public function approve(): void

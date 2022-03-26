@@ -7,10 +7,17 @@ use Study\DesignPattern\Budget;
 
 abstract class BudgetStatesAbstract
 {
+    protected string $stateName;
+
     /**
      * @throws DomainException
      */
     abstract public function calculateExtraDiscount(Budget $budget): float;
+
+    public function getName(): string
+    {
+        return $this->stateName;
+    }
 
     public function approve(Budget $budget): void
     {

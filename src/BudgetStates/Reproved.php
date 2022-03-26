@@ -7,6 +7,11 @@ use Study\DesignPattern\Budget;
 
 class Reproved extends BudgetStatesAbstract
 {
+    public function __construct()
+    {
+        $this->stateName = "Reproved";
+    }
+
     public function calculateExtraDiscount(Budget $budget): float
     {
         throw new DomainException("um orçamento reprovado não pode receber descontos.");

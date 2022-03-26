@@ -6,6 +6,11 @@ use Study\DesignPattern\Budget;
 
 class Approved extends BudgetStatesAbstract
 {
+    public function __construct()
+    {
+        $this->stateName = "Approved";
+    }
+    
     public function calculateExtraDiscount(Budget $budget): float
     {
         return $budget->value * 0.02;
