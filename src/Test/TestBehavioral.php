@@ -5,6 +5,7 @@ namespace Study\DesignPattern\Test;
 use Study\DesignPattern\Budget;
 use Study\DesignPattern\BudgetStates\Approved;
 use Study\DesignPattern\DiscountCalculator;
+use Study\DesignPattern\OrderGenerator;
 use Study\DesignPattern\TaxCalculator;
 use Study\DesignPattern\Taxes\Icms;
 use Study\DesignPattern\Taxes\Icpp;
@@ -59,5 +60,22 @@ final class TestBehavioral
         $budget->finalize();
         var_dump($budget->getState()->getName());
         var_dump("=== End State ===");
+    }
+
+    public static function testCommand(array $argv): void
+    {
+        var_dump("=== Start Command ===");
+        $budgetValue = $argv[1];
+        $budgetItemAmount = $argv[2];
+        $clientName = $argv[3];
+
+        $orderGenerator = new OrderGenerator(
+            $budgetValue,
+            $budgetItemAmount,
+            $clientName
+        );
+
+        $orderGenerator->execute();
+        var_dump("=== End Command ===");
     }
 }
