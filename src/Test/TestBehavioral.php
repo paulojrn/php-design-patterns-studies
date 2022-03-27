@@ -3,9 +3,9 @@
 namespace Study\DesignPattern\Test;
 
 use Study\DesignPattern\Budget;
-use Study\DesignPattern\BudgetStates\Approved;
+use Study\DesignPattern\Commands\OrderGeneratorCommand;
+use Study\DesignPattern\Commands\OrderGeneratorHandler;
 use Study\DesignPattern\DiscountCalculator;
-use Study\DesignPattern\OrderGenerator;
 use Study\DesignPattern\TaxCalculator;
 use Study\DesignPattern\Taxes\Icms;
 use Study\DesignPattern\Taxes\Icpp;
@@ -69,13 +69,14 @@ final class TestBehavioral
         $budgetItemAmount = $argv[2];
         $clientName = $argv[3];
 
-        $orderGenerator = new OrderGenerator(
+        $orderGenerator = new OrderGeneratorCommand(
             $budgetValue,
             $budgetItemAmount,
             $clientName
         );
 
-        $orderGenerator->execute();
+        $handler = new OrderGeneratorHandler($orderGenerator);
+        $handler->execute();
         var_dump("=== End Command ===");
     }
 }

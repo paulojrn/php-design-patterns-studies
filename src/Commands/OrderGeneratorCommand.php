@@ -1,10 +1,8 @@
 <?php
 
-namespace Study\DesignPattern;
+namespace Study\DesignPattern\Commands;
 
-use DateTimeImmutable;
-
-class OrderGenerator implements CommandInterface
+class OrderGeneratorCommand
 {
     private float $budgetValue;
     private int $budgetItemAmount;
@@ -20,14 +18,18 @@ class OrderGenerator implements CommandInterface
         $this->clientName = $clientName;
     }
 
-    public function execute(): void
+    public function getValue(): float
     {
-        $order = new Order(
-            $this->clientName,
-            new DateTimeImmutable(),
-            new Budget($this->budgetValue, $this->budgetItemAmount)
-        );
+        return $this->budgetValue;
+    }
 
-        echo $order;
+    public function getItemAmount(): int
+    {
+        return $this->budgetItemAmount;
+    }
+
+    public function getClientName(): string
+    {
+        return $this->clientName;
     }
 }
