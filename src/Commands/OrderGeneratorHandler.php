@@ -4,6 +4,9 @@ namespace Study\DesignPattern\Commands;
 
 use DateTimeImmutable;
 use Study\DesignPattern\{Budget, Order};
+use Study\DesignPattern\OrderGeneratorActions\CreateDatabaseOrder;
+use Study\DesignPattern\OrderGeneratorActions\GenerateLogOrder;
+use Study\DesignPattern\OrderGeneratorActions\SendEmailOrder;
 
 class OrderGeneratorHandler implements HandlerInterface
 {
@@ -27,6 +30,16 @@ class OrderGeneratorHandler implements HandlerInterface
             new DateTimeImmutable(),
             $budget
         );
+
+        $createDBOrder = new CreateDatabaseOrder();
+        $generateLogOrder = new GenerateLogOrder();
+        $sendEmailOrder = new SendEmailOrder();
+
+        $createDBOrder->executeAction($order);
+        $generateLogOrder->executeAction($order);
+        $sendEmailOrder->executeAction($order);
+
+        echo "===============\n";
 
         echo $order;
     }
