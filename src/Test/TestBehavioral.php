@@ -6,6 +6,9 @@ use Study\DesignPattern\Budget;
 use Study\DesignPattern\Commands\OrderGeneratorCommand;
 use Study\DesignPattern\Commands\OrderGeneratorHandler;
 use Study\DesignPattern\DiscountCalculator;
+use Study\DesignPattern\OrderGeneratorActions\CreateDatabaseOrder;
+use Study\DesignPattern\OrderGeneratorActions\GenerateLogOrder;
+use Study\DesignPattern\OrderGeneratorActions\SendEmailOrder;
 use Study\DesignPattern\TaxCalculator;
 use Study\DesignPattern\Taxes\Icms;
 use Study\DesignPattern\Taxes\Icpp;
@@ -78,5 +81,26 @@ final class TestBehavioral
         $handler = new OrderGeneratorHandler($orderGenerator);
         $handler->execute();
         var_dump("=== End Command ===");
+    }
+
+    public static function testObserver(array $argv): void
+    {
+        var_dump("=== Start Observer ===");
+        $budgetValue = $argv[1];
+        $budgetItemAmount = $argv[2];
+        $clientName = $argv[3];
+
+        $orderGenerator = new OrderGeneratorCommand(
+            $budgetValue,
+            $budgetItemAmount,
+            $clientName
+        );
+
+        $handler = new OrderGeneratorHandler($orderGenerator);
+        $handler->addAction(new CreateDatabaseOrder());
+        $handler->addAction(new GenerateLogOrder());
+        $handler->addAction(new SendEmailOrder());
+        $handler->execute();
+        var_dump("=== End Observer ===");
     }
 }

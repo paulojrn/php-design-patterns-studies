@@ -4,4 +4,5 @@ use Study\DesignPattern\Test\TestBehavioral;
 
 require_once "vendor/autoload.php";
 
-TestBehavioral::testCommand($argv);
+//TestBehavioral::testCommand($argv);
+TestBehavioral::testObserver($argv);

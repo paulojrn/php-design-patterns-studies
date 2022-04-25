@@ -4,17 +4,28 @@ namespace Study\DesignPattern\Commands;
 
 use DateTimeImmutable;
 use Study\DesignPattern\{Budget, Order};
-use Study\DesignPattern\OrderGeneratorActions\CreateDatabaseOrder;
-use Study\DesignPattern\OrderGeneratorActions\GenerateLogOrder;
-use Study\DesignPattern\OrderGeneratorActions\SendEmailOrder;
+use Study\DesignPattern\OrderGeneratorActions\OrderGeneratorActionsInterface;
 
 class OrderGeneratorHandler implements HandlerInterface
 {
+    /**
+     * @var OrderGeneratorCommand $orderGenerator
+     */
     private OrderGeneratorCommand $orderGenerator;
+
+    /**
+     * @var OrderGeneratorActionsInterface[]
+     */
+    private array $actions = [];
 
     public function __construct(OrderGeneratorCommand $orderGenerator)
     {
         $this->orderGenerator = $orderGenerator;
+    }
+
+    public function addAction(OrderGeneratorActionsInterface $action)
+    {
+        $this->actions[] = $action;    
     }
 
     public function execute(): void
@@ -31,15 +42,9 @@ class OrderGeneratorHandler implements HandlerInterface
             $budget
         );
 
-        $createDBOrder = new CreateDatabaseOrder();
-        $generateLogOrder = new GenerateLogOrder();
-        $sendEmailOrder = new SendEmailOrder();
-
-        $createDBOrder->executeAction($order);
-        $generateLogOrder->executeAction($order);
-        $sendEmailOrder->executeAction($order);
-
-        echo "===============\n";
+        foreach ($this->actions as $action) {
+            $action->executeAction($order);
+        }
 
         echo $order;
     }

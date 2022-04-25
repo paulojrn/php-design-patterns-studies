@@ -27,9 +27,9 @@ class Order
         $value = $this->budget->value;
         $amount = $this->budget->itemAmount;
 
-        return  "Cliente: $name\n".
+        return  "\nCliente: $name\n".
                 "Data de finalização: $date\n".
                 "Valor: $value\n".
-                "Quantidade: $amount\n";
+                "Quantidade: $amount\n\n";
     }
 }
