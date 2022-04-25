@@ -3,29 +3,49 @@
 namespace Study\DesignPattern\Commands;
 
 use DateTimeImmutable;
+use SplObserver;
+use SplSubject;
 use Study\DesignPattern\{Budget, Order};
-use Study\DesignPattern\OrderGeneratorActions\OrderGeneratorActionsInterface;
 
-class OrderGeneratorHandler implements HandlerInterface
+class OrderGeneratorHandler implements HandlerInterface, SplSubject
 {
     /**
-     * @var OrderGeneratorCommand $orderGenerator
+     * @var OrderGeneratorCommand
      */
     private OrderGeneratorCommand $orderGenerator;
 
     /**
-     * @var OrderGeneratorActionsInterface[]
+     * @var Order
      */
-    private array $actions = [];
+    public Order $order;
+
+    /**
+     * @var SplObserver[]
+     */
+    private array $observers = [];
 
     public function __construct(OrderGeneratorCommand $orderGenerator)
     {
         $this->orderGenerator = $orderGenerator;
     }
 
-    public function addAction(OrderGeneratorActionsInterface $action)
+    public function attach(SplObserver $observer): void
     {
-        $this->actions[] = $action;    
+        $this->observers[] = $observer;
+    }
+
+    public function detach(SplObserver $observer): void
+    {
+        if (($key = array_search($observer, $this->observers, true)) !== false) {
+            unset($this->observers[$key]);
+        }
+    }
+
+    public function notify(): void
+    {
+        foreach ($this->observers as $observer) {
+            $observer->update($this);
+        }
     }
 
     public function execute(): void
@@ -42,9 +62,8 @@ class OrderGeneratorHandler implements HandlerInterface
             $budget
         );
 
-        foreach ($this->actions as $action) {
-            $action->executeAction($order);
-        }
+        $this->order = $order;
+        $this->notify();
 
         echo $order;
     }

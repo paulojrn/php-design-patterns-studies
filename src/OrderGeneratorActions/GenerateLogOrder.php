@@ -2,12 +2,13 @@
 
 namespace Study\DesignPattern\OrderGeneratorActions;
 
-use Study\DesignPattern\Order;
+use SplObserver;
+use SplSubject;
 
-class GenerateLogOrder implements OrderGeneratorActionsInterface
+class GenerateLogOrder implements SplObserver
 {
-    public function executeAction(Order $order): void
+    public function update(SplSubject $subject): void
     {
-        echo "GERANDO log do cliente {$order->clientName}\n";
+        echo "GERANDO log do cliente {$subject->order->clientName}\n";
     }
 }

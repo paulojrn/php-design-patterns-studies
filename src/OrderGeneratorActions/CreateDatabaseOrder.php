@@ -2,12 +2,13 @@
 
 namespace Study\DesignPattern\OrderGeneratorActions;
 
-use Study\DesignPattern\Order;
+use SplObserver;
+use SplSubject;
 
-class CreateDatabaseOrder implements OrderGeneratorActionsInterface
+class CreateDatabaseOrder implements SplObserver
 {
-    public function executeAction(Order $order): void
+    public function update(SplSubject $subject): void
     {
-        echo "CRIANDO pedido do cliente {$order->clientName} no banco de dados\n";
+        echo "CRIANDO pedido do cliente {$subject->order->clientName} no banco de dados\n";
     }
 }

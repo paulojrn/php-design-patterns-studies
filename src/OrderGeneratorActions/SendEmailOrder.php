@@ -2,12 +2,13 @@
 
 namespace Study\DesignPattern\OrderGeneratorActions;
 
-use Study\DesignPattern\Order;
+use SplObserver;
+use SplSubject;
 
-class SendEmailOrder implements OrderGeneratorActionsInterface
+class SendEmailOrder implements SplObserver
 {
-    public function executeAction(Order $order): void
+    public function update(SplSubject $subject): void
     {
-        echo "ENVIANDO email para o cliente {$order->clientName}\n";
+        echo "ENVIANDO email para o cliente {$subject->order->clientName}\n";
     }
 }

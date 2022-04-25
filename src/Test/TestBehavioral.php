@@ -97,9 +97,16 @@ final class TestBehavioral
         );
 
         $handler = new OrderGeneratorHandler($orderGenerator);
-        $handler->addAction(new CreateDatabaseOrder());
-        $handler->addAction(new GenerateLogOrder());
-        $handler->addAction(new SendEmailOrder());
+        $observer1 = new CreateDatabaseOrder();
+        $observer2 = new GenerateLogOrder();
+        $observer3 = new SendEmailOrder();
+        
+        $handler->attach($observer1);
+        $handler->attach($observer2);
+        $handler->attach($observer3);
+        $handler->execute();
+        $handler->detach($observer1);
+        $handler->detach($observer2);
         $handler->execute();
         var_dump("=== End Observer ===");
     }
