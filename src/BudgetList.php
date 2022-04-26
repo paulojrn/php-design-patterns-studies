@@ -2,7 +2,12 @@
 
 namespace Study\DesignPattern;
 
-class BudgetList
+use ArrayIterator;
+use IteratorAggregate;
+use Study\DesignPattern\BudgetStates\Finalized;
+use Traversable;
+
+class BudgetList implements IteratorAggregate
 {
     /**
      * @var Budget[]
@@ -15,8 +20,18 @@ class BudgetList
         return $this;
     }
 
-    public function toArray(): array
+    public function getIterator(): Traversable
     {
-        return $this->budgets;
+        return new ArrayIterator($this->budgets);
+    }
+
+    public function getFinalizedBudgets(): Traversable
+    {
+        $finalizedBudgets = array_filter(
+            $this->budgets,
+            fn($budget) => get_class($budget->getState()) === Finalized::class
+        );
+        
+        return new ArrayIterator($finalizedBudgets);
     }
 }

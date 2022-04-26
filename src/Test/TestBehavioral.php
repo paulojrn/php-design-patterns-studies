@@ -127,15 +127,18 @@ final class TestBehavioral
         $budget3 = new Budget(3400.00, 2);
         $budget3->approve();
         $budget3->finalize();
+        $budget4 = new Budget(40000, 1);
+        $budget4->approve();
+        $budget4->finalize();
 
-        //$budgetList = [$budget1, $budget2, $budget3]; // pode causar problema caso adicione um item que não seja Budget
         $budgetList = new BudgetList();
-        $budgetList->add($budget1)
-            ->add($budget2)
-            ->add($budget3);
+        $budgetList->add($budget1)->add($budget2)->add($budget3)->add($budget4);
+
+        $list = $budgetList;
+        //$list = $budgetList->getFinalizedBudgets();
 
         echo "\n";
-        foreach ($budgetList->toArray() as $budget) {
+        foreach ($list as $budget) {
             echo "Estado: " . $budget->getState()->getName() . "\n";
             echo "Valor: " . $budget->value . "\n";
             echo "Qtd. Itens: " . $budget->itemAmount . "\n";
