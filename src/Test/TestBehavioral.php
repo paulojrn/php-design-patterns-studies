@@ -3,6 +3,7 @@
 namespace Study\DesignPattern\Test;
 
 use Study\DesignPattern\Budget;
+use Study\DesignPattern\BudgetList;
 use Study\DesignPattern\Commands\OrderGeneratorCommand;
 use Study\DesignPattern\Commands\OrderGeneratorHandler;
 use Study\DesignPattern\DiscountCalculator;
@@ -100,7 +101,7 @@ final class TestBehavioral
         $observer1 = new CreateDatabaseOrder();
         $observer2 = new GenerateLogOrder();
         $observer3 = new SendEmailOrder();
-        
+
         $handler->attach($observer1);
         $handler->attach($observer2);
         $handler->attach($observer3);
@@ -109,5 +110,38 @@ final class TestBehavioral
         $handler->detach($observer2);
         $handler->execute();
         var_dump("=== End Observer ===");
+    }
+
+    public static function testIterator(): void
+    {
+        var_dump("=== Start Iterator ===");
+
+        /**
+         * @var Budget $budget 
+         */
+
+        $budget1 = new Budget(1500.75, 7);
+        $budget1->approve();
+        $budget2 = new Budget(345.11, 10);
+        $budget2->reprove();
+        $budget3 = new Budget(3400.00, 2);
+        $budget3->approve();
+        $budget3->finalize();
+
+        //$budgetList = [$budget1, $budget2, $budget3]; // pode causar problema caso adicione um item que não seja Budget
+        $budgetList = new BudgetList();
+        $budgetList->add($budget1)
+            ->add($budget2)
+            ->add($budget3);
+
+        echo "\n";
+        foreach ($budgetList->toArray() as $budget) {
+            echo "Estado: " . $budget->getState()->getName() . "\n";
+            echo "Valor: " . $budget->value . "\n";
+            echo "Qtd. Itens: " . $budget->itemAmount . "\n";
+            echo "\n";
+        }
+
+        var_dump("=== End Iterator ===");
     }
 }
